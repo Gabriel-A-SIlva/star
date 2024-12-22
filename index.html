@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            /* Fundo estrelado */
+            body,
+            html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                overflow: hidden;
+                font-family: Arial, sans-serif;
+            }
+            .welcome-background {
+                display: flex;
+                justify-content: center; /* Alinha horizontalmente */
+                align-items: center; /* Alinha verticalmente */
+                position: fixed;
+                height: 100vh;
+                width: 100vw;
+                backdrop-filter: blur(10px);
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-family: Arial, sans-serif;
+                z-index: 1;
+            }
+            .container-txt {
+                text-align: center;
+                width: 100%;
+            }
+            .welcome-text {
+                color: #fff;
+                font-size: 28px;
+                white-space: pre;
+                position: relative;
+                z-index: 1;
+            }
+            #constellation {
+                position: relative;
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle, #1e1e1b, #000000);
+            }
+
+            /* Estilo do popup */
+            #memory-popup {
+                z-index: 1;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                backdrop-filter: blur(10px);
+                padding: 15px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                text-align: center;
+                width: 100%;
+                height: 100vh;
+                word-wrap: break-word;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+            }
+
+            #memory-popup.hidden {
+                display: none;
+            }
+
+            button {
+                background-color: #fff;
+                color: #000;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 5px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+
+            .star {
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                background-color: white;
+                border-radius: 50%;
+                box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+                cursor: pointer;
+                transition: transform 0.3s;
+            }
+
+            .star:hover {
+                transform: scale(1.5);
+            }
+
+            @media (max-width: 450px) {
+                body {
+                    font-size: 14px;
+                }
+
+                #memory-popup {
+                    padding: 10px;
+                    max-width: 90%;
+                    font-size: 14px;
+                }
+
+                button {
+                    font-size: 12px;
+                    padding: 8px 15px;
+                }
+
+                .star {
+                    width: 10px;
+                    height: 10px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="welcome-background main-containerA">
+            <div class="container-txt">
+                <div id="text" class="welcome-text"></div>
+            </div>
+        </div>
+        <div id="constellation">
+            <div id="memory-popup" class="hidden">
+                <p id="memory-text" style="color: #fff"></p>
+                <button onclick="closePopup()">Fechar</button>
+            </div>
+        </div>
+        <script>
+            const welcome = document.querySelector(".welcome-background");
+            const fullText = `A culpa é das Estrelas`;
+            let index = 0;
+
+            const textElement = document.getElementById("text");
+            const mainContainer = document.querySelector(".main-containerA");
+
+            // Function to type the text with animation
+            function typeText() {
+                if (index < fullText.length) {
+                    const char = fullText.charAt(index);
+                    if (char === "\n") {
+                        textElement.innerHTML += "<br>";
+                    } else {
+                        textElement.innerHTML += char;
+                    }
+                    index++;
+                    setTimeout(typeText, 50);
+                } else {
+                    // Wait a moment before hiding the welcome screen
+                    setTimeout(() => {
+                        mainContainer.style.display = "none"; // Hide the welcome screen
+                    }, 1000);
+                }
+            }
+
+            // Initialize the welcome screen and start typing text
+            function initWelcome() {
+                typeText();
+            }
+
+            // Start the welcome animation when the page loads
+            window.onload = initWelcome;
+
+            const constellation = document.getElementById("constellation");
+            const popup = document.getElementById("memory-popup");
+            const memoryText = document.getElementById("memory-text");
+
+            // Momentos importantes do relacionamento com coordenadas embaralhadas
+            const memories = [
+                {
+                    x: 14,
+                    y: 67,
+                    text: "Amor, enquanto olho para nós no futuro, vejo um lar cheio de paz, risos e orações. Vejo a graça de Deus nos conduzindo em cada passo, e isso me enche de alegria. Mal posso esperar para viver essa vida ao seu lado.",
+                },
+                {
+                    x: 120,
+                    y: 280,
+                    text: "Eu imagino nossas manhãs juntos, começando com uma oração e um café simples. Sei que nosso amor será como uma árvore plantada junto às águas, sempre firme e florescendo.",
+                },
+                {
+                    x: 285,
+                    y: 89,
+                    text: "Nosso futuro é tão lindo porque ele não é perfeito, mas é sustentado pela graça de Deus. Quero construir uma casa cheia de amor, fé e cumplicidade ao seu lado. Obrigado por ser minha promessa e meu amanhã.",
+                },
+                {
+                    x: 177,
+                    y: 310,
+                    text: "Penso no dia em que seremos marido e mulher, compartilhando nossas vidas em simplicidade e gratidão. Será uma caminhada cheia de desafios, mas sempre coberta pela presença de Deus. Mal posso esperar para vivermos isso juntos.",
+                },
+                {
+                    x: 330,
+                    y: 230,
+                    text: "Nos vejo sentados à mesa, agradecendo a Deus pelas pequenas e grandes bênçãos. Nosso amor será um reflexo do que Deus planejou desde o início: dois corações unidos em um propósito eterno.",
+                },
+                {
+                    x: 50,
+                    y: 410,
+                    text: "Você é meu sonho do futuro, a pessoa com quem quero dividir uma vida simples, porém rica em significado. Eu oro todos os dias por nossa união e pelo lar que vamos construir com Cristo no centro.",
+                },
+                {
+                    x: 300,
+                    y: 410,
+                    text: "Te vejo nos momentos simples do futuro: rindo, orando, segurando minha mão enquanto enfrentamos a vida juntos. Cada detalhe me faz ter mais certeza de que Deus nos fez um para o outro.",
+                },
+                {
+                    x: 200,
+                    y: 140,
+                    text: "Nosso amor será nosso testemunho, um reflexo da fidelidade de Deus em nossas vidas. Quero te amar como Cristo amou a igreja, todos os dias, para sempre.",
+                },
+                {
+                    x: 410,
+                    y: 60,
+                    text: "Imagino nós dois, lado a lado, nos fortalecendo em Deus e celebrando as pequenas vitórias da vida. Que privilégio será viver ao seu lado e construir algo tão lindo, tão eterno.",
+                },
+                {
+                    x: 125,
+                    y: 75,
+                    text: "Amor, o que mais me alegra sobre nosso futuro é que ele não depende de riqueza ou perfeição. Basta termos um ao outro e a presença de Deus em tudo o que fizermos. Esse é o meu sonho: você e eu, sempre com Ele.",
+                },
+                {
+                    x: 44,
+                    y: 285,
+                    text: "Você deve ser um código-fonte, porque cada linha de você compila perfeitamente no meu coração.",
+                },
+                {
+                    x: 260,
+                    y: 180,
+                    text: "Você é o meu algoritmo favorito: sempre me fazendo pensar e com uma solução perfeita.",
+                },
+                {
+                    x: 215,
+                    y: 55,
+                    text: "Se eu fosse um átomo, eu ficaria ao seu lado, porque você é a partícula que completa meu universo.",
+                },
+                {
+                    x: 115,
+                    y: 365,
+                    text: "Você deve ser uma estrela no céu, porque sempre me faz brilhar, mesmo nos dias mais escuros.",
+                },
+                {
+                    x: 67,
+                    y: 420,
+                    text: "Você é como um sistema operacional perfeito, nunca dá erro e me mantém funcionando bem.",
+                },
+                {
+                    x: 270,
+                    y: 110,
+                    text: "Eu te amei no primeiro olhar, como se fosse um dorama onde o destino nos uniu de uma forma inexplicável.",
+                },
+                {
+                    x: 330,
+                    y: 95,
+                    text: "Se nosso amor fosse um dorama, cada episódio seria mais emocionante do que o anterior. Eu te amo mais a cada cena.",
+                },
+                {
+                    x: 80,
+                    y: 275,
+                    text: "Se você fosse a protagonista do meu dorama, eu seria o vilão que se apaixona por você a cada vez que te vejo.",
+                },
+                {
+                    x: 220,
+                    y: 380,
+                    text: "No dorama da minha vida, você é a trama principal que me faz viver todos os dias com um sorriso no rosto.",
+                },
+                {
+                    x: 260,
+                    y: 215,
+                    text: "Você é meu destino, como o enredo perfeito de um dorama que eu nunca quero que termine.",
+                },
+                {
+                    x: 35,
+                    y: 115,
+                    text: `Eu quero partilhar
+Eu quero partilhar
+A vida boa com você
+Eu quero partilhar
+Eu quero partilhar
+A vida boa com você`,
+                },
+                {
+                    x: 380,
+                    y: 270,
+                    text: `Que amor tão grande tem que ser vivido a todo instante
+A cada hora que eu tô longe, é um desperdício
+Eu só tenho 80 anos pela frente
+Por favor, me dê uma chance de viver`,
+                },
+                {
+                    x: 160,
+                    y: 450,
+                    text: `Se for preciso, eu giro a Terra inteira
+Até que o tempo se esqueça de ir pra frente e volte atrás
+Milhões de anos, quando todos continentes se encontravam
+Pra que eu possa caminhar até você`,
+                },
+                {
+                    x: 70,
+                    y: 60,
+                    text: `Também perdi o meu rumo, até o meu canto ficou mudo
+E eu desconfio que esse mundo já não seja tudo aquilo
+Mas não importa, a gente inventa a nossa vida
+E a vida é boa com você`,
+                },
+                {
+                    x: 340,
+                    y: 400,
+                    text: `Crescei, luar
+Pra iluminar as trevas
+Fundas da paixão
+Eu quis lutar
+Contra o poder do amor
+Caí nos pés do vencedor
+Para ser o serviçal
+Do samurai
+Mas eu tô tão feliz
+Dizem que o amor atrai`,
+                },
+                {
+                    x: 50,
+                    y: 500,
+                    text: `Porém, eu consigo, de maneira simples, mas verdadeira,
+dizer um pouco de quem tu és para mim.
+Eu me encontrava em um mar escuro, tempestuoso,
+vagava sem bússola. O céu estava escuro, nuvens
+obnubilosas ocultavam o brilho das estrelas.
+Sem esperanças, sozinho, perdido e angustiado,
+estava para dar cabo da minha vida desnorteada. Até que, em uma noite comum,
+uma estrela brilhou. Seu luzir era mais intenso
+do que as brumas das minhas noites.
+O brilho daquela estrela era mais forte
+do que milhares, mais belo que constelações inteiras.
+Eu me encantei!
+Imediatamente pulei em meu leme
+e apontei meu barco, minha vida, direcionada para aquela estrela.
+Não tirava meus olhos!
+O mais intrigante é que ela brilhava até de dia!
+Ela me guiou para uma terra de doçura. Você é minha estrela-guia,
+meu farol celeste.`,
+                },
+                {
+                    x: 120,
+                    y: 520,
+                    text: `Você tem que me fazer um juramento
+De só ter um pensamento
+Ser só minha até morrer
+E também de não perder esse jeitinho
+De falar devagarinho
+Essas histórias de você
+E de repente me fazer muito carinho
+E chorar bem de mansinho
+Sem ninguém saber por quê`,
+                },
+                {
+                    x: 180,
+                    y: 540,
+                    text: ` É um milagre
+Tudo que Deus criou pensando em você
+Fez a Via-Láctea, fez os dinossauros
+Sem pensar em nada, fez a minha vida
+E te deu. Sem contar os dias que me faz morrer
+Sem saber de ti, jogado à solidão
+Mas se quer saber se eu quero outra vida
+Não, não`,
+                },
+                {
+                    x: 250,
+                    y: 560,
+                    text: `Aqui ou noutro lugar
+Que pode ser feio ou bonito
+Se nós estivermos juntos
+Haverá um céu azul
+Um amor puro
+Não sabe a força que tem
+Meu amor, eu juro
+Ser teu e de mais ninguém
+Um amor puro`,
+                },
+                {
+                    x: 320,
+                    y: 580,
+                    text: `Nos dias cinzentos que parecem sem fim,
+Carrego um fardo que pesa dentro de mim.
+A mente é um campo de batalha sombrio,
+Mas, ao teu lado, encontro o abrigo que preciso. Teus olhos me lembram do que é ser visto,
+No toque suave, meu coração é reconquisto.
+Ainda luto contra a sombra que me abraça,
+Mas tua presença é a força que me refaça.`,
+                },
+                {
+                    x: 180,
+                    y: 670,
+                    text: "Lembra aquele dorama onde o protagonista só percebe que encontrou o amor da vida dele depois de muitas idas e vindas? Eu agradeço todos os dias que não precisei esperar tanto para te encontrar.",
+                },
+                {
+                    x: 120,
+                    y: 214,
+                    text: "Se o nosso amor fosse um dorama, o título seria algo como ‘Destino Inevitável’, porque desde o primeiro momento, já sabia que o final feliz era você.",
+                },
+                {
+                    x: 220,
+                    y: 150,
+                    text: "Você é como a Yoon Se-ri: caiu na minha vida de repente, mas mudou tudo para melhor.",
+                },
+                {
+                    x: 160,
+                    y: 490,
+                    text: "Você deve ser o segredo da maquiagem da Ju-kyung, porque iluminou meu mundo com um simples olhar.",
+                },
+                {
+                    x: 300,
+                    y: 258,
+                    text: "Você é como o Su-ho para a Ju-kyung: sempre a pessoa certa para transformar um dia comum em algo especial.",
+                },
+                {
+                    x: 250,
+                    y: 490,
+                    text: "Nosso amor é como o destino da Yoon Se-ri e do Capitão Ri: inesperado, mas impossível de ignorar.",
+                },
+                {
+                    x: 200,
+                    y: 610,
+                    text: "Você é o meu refúgio na tempestade, como a vila na Coreia do Norte foi para a Yoon Se-ri.",
+                },
+            ];
+
+            // Função para criar uma estrela
+            function createStar(memory) {
+                const star = document.createElement("div");
+                star.className = "star";
+                star.style.left = `${memory.x}px`;
+                star.style.top = `${memory.y}px`;
+                star.addEventListener("click", () => {
+                    memoryText.textContent = memory.text;
+                    popup.classList.remove("hidden");
+                });
+                constellation.appendChild(star);
+            }
+
+            // Fechar popup
+            function closePopup() {
+                popup.classList.add("hidden");
+            }
+
+            // Adicionar estrelas ao céu
+            memories.forEach(createStar);
+        </script>
+    </body>
+</html>
